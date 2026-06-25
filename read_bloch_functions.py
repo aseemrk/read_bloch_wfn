@@ -8,6 +8,20 @@ import netCDF4 as nc
 wf_header = 'SAVE/ns.wf'
 db_filename = 'SAVE/ns.db1'
 output_file = 'wfn_GaAs.npz'
+read_dips = True
+dips_file = 'dipoles/ndb.dipoles' 
+output_dips = 'dipoles'
+
+
+############## Function for reading dipoles #####################
+
+def read_dipoles(dips_file):
+    dips = nc.Dataset(dips_file,'r')
+    dipoles  = np.array(dips.variables['DIP_iR'])
+    dipoles = dipoles[0,...,0] + 1j*  dipoles[0,...,1]
+    # nkpt, nbnd, nbnd, directions
+    return(dipoles)
+
 
 ############## Reading databse #####################
 
@@ -41,3 +55,13 @@ np.save(output_file,wfn,allow_pickle=True)
 # nkpt, nbnd, nspinor, nG 
 # This can be loaded directly using
 # array = np.load(output_file,allow_pickle=True)
+
+
+if read_dips==True:
+    print("Reading and dumping dipoles")
+    dipoles = read_dipoles(dips_file)
+    np.save(output_dips,dipoles,allow_pickle=True)
+    # Dipole matrix is stored as an array with
+    # indices : nkpt, nbnd, nbnd, cartesian directions
+
+
