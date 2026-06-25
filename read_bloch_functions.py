@@ -11,11 +11,21 @@ output_file = 'wfn_GaAs'
 read_dips = True
 dips_file = 'dipoles/ndb.dipoles' 
 output_dips = 'dipoles'
+output_eig = 'eigenvalues'
 
 
 ############## Function for reading dipoles #####################
 
 def read_dipoles(dips_file):
+    dips = nc.Dataset(dips_file,'r')
+    dipoles  = np.array(dips.variables['DIP_iR'])
+    dipoles = dipoles[0,...,0] + 1j*  dipoles[0,...,1]
+    # nkpt, nbnd, nbnd, directions
+    return(dipoles)
+
+############## Function for reading eigenvalues #####################
+
+def read_eigs(db_filename):
     dips = nc.Dataset(dips_file,'r')
     dipoles  = np.array(dips.variables['DIP_iR'])
     dipoles = dipoles[0,...,0] + 1j*  dipoles[0,...,1]
@@ -56,6 +66,17 @@ np.save(output_file,wfn,allow_pickle=True)
 # This can be loaded directly using
 # array = np.load(output_file,allow_pickle=True)
 
+######### Dumping eigenvalues #########
+
+print("Reading and dumping eigenvalues")
+
+eigs = np.array(database['EIGENVALUES'])[0,...]
+# Dimension of eigenvalue array are nkpt, nbnd
+
+np.save(output_eig,eigs,allow_pickle=True)
+
+
+######### Dumping diples #########
 
 if read_dips==True:
     print("Reading and dumping dipoles")
