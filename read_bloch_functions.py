@@ -19,8 +19,8 @@ output_eig = 'eigenvalues'
 def read_dipoles(dips_file):
     dips = nc.Dataset(dips_file,'r')
     dipoles  = np.array(dips.variables['DIP_iR'])
-    # Here change the variable to 'DIP_P' or 'DIP_v'
-    # for momentum or velcity matrix elements
+    # Here change the variable to 'DIP_iR', 'DIP_P', 'DIP_v'
+    # for dipole, momentum or velocity matrix elements
     dipoles = dipoles[0,...,0] + 1j*  dipoles[0,...,1]
     # nkpt, nbnd, nbnd, directions
     return(dipoles)
