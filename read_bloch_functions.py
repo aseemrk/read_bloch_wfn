@@ -7,7 +7,7 @@ import netCDF4 as nc
 
 wf_header = 'SAVE/ns.wf'
 db_filename = 'SAVE/ns.db1'
-output_file = 'wfn_GaAs.npz'
+output_file = 'wfn_GaAs'
 read_dips = True
 dips_file = 'dipoles/ndb.dipoles' 
 output_dips = 'dipoles'
@@ -23,7 +23,7 @@ def read_dipoles(dips_file):
     return(dipoles)
 
 
-############## Reading databse #####################
+############## Function for reading databse #####################
 
 database = nc.Dataset(db_filename)
 nkpt = int( database['EIGENVALUES'][...].shape[1] )
